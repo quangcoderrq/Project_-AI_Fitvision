@@ -1,0 +1,23 @@
+# Core dependencies
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# Image processing
+opencv-python>=4.8.0
+Pillow>=10.0.0
+
+# Pose estimation
+mediapipe>=0.10.0
+
+# API
+fastapi>=0.104.0
+uvicorn>=0.24.0
+python-multipart>=0.0.6
+
+# Data validation
+pydantic>=2.5.0
+
+# Utilities
+python-dotenv>=1.0.0
+joblib>=1.3.0
