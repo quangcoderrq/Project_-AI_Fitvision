@@ -164,6 +164,23 @@ Thông thường, khi chạy server nội bộ để test web, ta dùng `--host 
 
 ---
 
+## 🛠️ Tính Năng SaaS & Backend Thực Tế (Nâng Cấp)
+Hệ thống đã được nâng cấp từ Mock-data lên **Backend thật** tích hợp cơ sở dữ liệu SQLite:
+1. **Database SQLite (`fitvision.db`)**: Tự động khởi tạo cấu trúc bảng (`users`, `api_tokens`, `prediction_logs`) khi chạy server FastAPI.
+2. **Xác thực JWT (JSON Web Token)**: Cho phép chủ shop đăng ký mới, đăng nhập tài khoản doanh nghiệp. Mật khẩu được mã hóa an toàn bằng thuật toán `pbkdf2_sha256`.
+3. **Quản lý API Token**: Mỗi shop có 1 token riêng (`fv_live_...`), có thể tạo lại token mới bất kỳ lúc nào trên Dashboard.
+4. **Bảo vệ API `/predict`**: Chặn các request không hợp lệ (trả về lỗi `401 Unauthorized`). Demo công cộng sử dụng một guest token đặc biệt để hoạt động an toàn.
+5. **Lịch sử & Thống kê log thật**: Hiển thị bảng danh sách các lượt quét size AI của khách hàng thực tế và sơ đồ băng thông API trực tiếp từ database.
+
+### Chạy thử nghiệm tự động (API Integration Tests)
+Để kiểm tra tính ổn định của cơ sở dữ liệu và các API bảo mật, bạn hãy di chuyển vào thư mục `backend` và chạy file script:
+```bash
+venv\Scripts\python test_db_api.py
+```
+Script sẽ tự động đăng ký user mới, đăng nhập lấy JWT, kiểm tra bảo mật API prediction và hiển thị kết quả log trực tiếp!
+
+---
+
 ## 🛑 Cách tắt Server
 Để dừng ứng dụng web hoặc mobile app, bạn quay lại màn hình Terminal tương ứng đang chạy và nhấn tổ hợp phím **`Ctrl + C`**.
 

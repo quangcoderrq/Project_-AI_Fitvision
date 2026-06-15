@@ -17,7 +17,8 @@ if os.path.exists(local_lib) and local_lib not in sys.path:
     sys.path.insert(0, local_lib)
 
 try:
-    import mediapipe as mp
+    from mediapipe.python.solutions import pose as mp_pose
+    from mediapipe.python.solutions import drawing_utils as mp_drawing
     MEDIAPIPE_AVAILABLE = True
 except ImportError:
     MEDIAPIPE_AVAILABLE = False
@@ -93,9 +94,9 @@ class PoseDetector:
         self.min_detection_confidence = min_detection_confidence
         self.min_tracing_confidence = min_tracking_confidence
         
-        # Use standard MediaPipe solutions
-        self.mp_pose = mp.solutions.pose
-        self.mp_drawing = mp.solutions.drawing_utils
+        # Use MediaPipe solutions
+        self.mp_pose = mp_pose
+        self.mp_drawing = mp_drawing
         
         self.pose = self.mp_pose.Pose(
             static_image_mode=static_image_mode,
