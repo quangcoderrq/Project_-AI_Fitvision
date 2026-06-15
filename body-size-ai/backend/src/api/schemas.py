@@ -5,7 +5,9 @@ Extended with detailed shirt/pants sizing.
 """
 
 from typing import Dict, List, Optional
-from pydantic import BaseModel, Field, validator
+import re
+
+from pydantic import BaseModel, Field, field_validator, validator
 
 
 class PredictionRequest(BaseModel):
@@ -188,6 +190,77 @@ class PredictionResponse(BaseModel):
                 "error": None
             }
         }
+
+
+class UserRegisterRequest(BaseModel):
+    full_name: str = Field(..., min_length=2, max_length=100, description="Họ và tên")
+    email: str = Field(..., description="Email đăng ký (Gmail hoặc email khác)")
+    password: str = Field(..., min_length=6, description="Mật khẩu (ít nhất 6 ký tự)")
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_full_name(cls, v: str) -> str:
+        name = v.strip()
+        if not name:
+            raise ValueError("Họ và tên không được để trống")
+        return name
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v: str) -> str:
+        email = v.strip().lower()
+        if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
+            raise ValueError("Email không hợp lệ")
+        return email
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if len(v) < 6:
+            raise ValueError("Mật khẩu phải có ít nhất 6 ký tự")
+        return v
+
+
+class UserLoginRequest(BaseModel):
+    email: str
+    password: str
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v: str) -> str:
+        return v.strip().lower()
+
+
+class AuthResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    full_name: Optional[str] = None
+    email: str
+    active_plan: str
+    api_token: str
+
+
+class UserProfileResponse(BaseModel):
+    full_name: Optional[str] = None
+    email: str
+    active_plan: str
+    api_token: str
+
+
+class SubscriptionRequest(BaseModel):
+    plan_name: str
+
+
+class PredictionLogResponse(BaseModel):
+    id: int
+    height: float
+    weight: float
+    gender: str
+    brand: str
+    predicted_size: Optional[str]
+    confidence: float
+    created_at: str
+
 
 
 class BrandInfo(BaseModel):

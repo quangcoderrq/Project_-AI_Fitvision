@@ -21,3 +21,10 @@ pydantic>=2.5.0
 # Utilities
 python-dotenv>=1.0.0
 joblib>=1.3.0
+
+# Database, Security & Testing (New SaaS Features)
+sqlalchemy>=2.0.0
+pyjwt>=2.8.0
+passlib>=1.7.4
+requests>=2.31.0
+
