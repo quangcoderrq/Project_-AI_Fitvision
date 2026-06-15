@@ -17,12 +17,13 @@ if os.path.exists(local_lib) and local_lib not in sys.path:
     sys.path.insert(0, local_lib)
 
 try:
+    import mediapipe as mp
     from mediapipe.python.solutions import pose as mp_pose
     from mediapipe.python.solutions import drawing_utils as mp_drawing
     MEDIAPIPE_AVAILABLE = True
-except ImportError:
+except Exception as e:
     MEDIAPIPE_AVAILABLE = False
-    print("Warning: MediaPipe not installed. Pose detection will not work.")
+    print(f"Warning: MediaPipe import failed: {e}")
 
 
 
