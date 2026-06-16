@@ -259,6 +259,165 @@ class PoseDetector:
         
         return len(issues) == 0, issues
     
+    
+    def calculate_pose_quality(
+        self,
+        detection_result: Dict,
+        image_type: str = "full"
+    ) -> float:
+        if not detection_result:
+            return 0.0
+
+        keypoints = detection_result.get("keypoints", {})
+        confidences = detection_result.get("confidences", {})
+        image_size = detection_result.get("image_size", (0, 0))
+
+        if not keypoints or not confidences:
+            return 0.0
+
+        if image_type == "upper":
+            required_points = [
+                "nose",
+                "left_shoulder", "right_shoulder",
+                "left_hip", "right_hip",
+                "left_elbow", "right_elbow"
+            ]
+        elif image_type == "lower":
+            required_points = [
+                "left_hip", "right_hip",
+                "left_knee", "right_knee",
+                "left_ankle", "right_ankle"
+            ]
+        else:
+            required_points = [
+                "nose",
+                "left_shoulder", "right_shoulder",
+                "left_hip", "right_hip",
+                "left_knee", "right_knee",
+                "left_ankle", "right_ankle"
+            ]
+
+        visible_scores = [
+            confidences.get(point, 0.0)
+            for point in required_points
+            if point in keypoints
+        ]
+
+        if not visible_scores:
+            return 0.0
+
+        visibility_score = sum(visible_scores) / len(required_points)
+        symmetry_score = self._calculate_symmetry_score(keypoints, image_type)
+        size_score = self._calculate_body_size_score(keypoints, image_size, image_type)
+        vertical_score = self._calculate_vertical_alignment_score(keypoints)
+
+        quality = (
+            visibility_score * 0.45 +
+            symmetry_score * 0.25 +
+            size_score * 0.20 +
+            vertical_score * 0.10
+        )
+
+        return round(float(max(0.0, min(quality, 1.0))), 2)
+
+    def _calculate_symmetry_score(
+        self,
+        keypoints: Dict[str, List[int]],
+        image_type: str = "full"
+    ) -> float:
+        pairs = []
+
+        if image_type in ["full", "upper"]:
+            pairs.extend([
+                ("left_shoulder", "right_shoulder"),
+                ("left_hip", "right_hip"),
+            ])
+
+        if image_type in ["full", "lower"]:
+            pairs.extend([
+                ("left_knee", "right_knee"),
+                ("left_ankle", "right_ankle"),
+            ])
+
+        scores = []
+
+        for left, right in pairs:
+            if left in keypoints and right in keypoints:
+                y1 = keypoints[left][1]
+                y2 = keypoints[right][1]
+
+                avg_y = max((abs(y1) + abs(y2)) / 2, 1)
+                diff_ratio = abs(y1 - y2) / avg_y
+
+                score = max(0.0, 1.0 - diff_ratio * 8)
+                scores.append(score)
+
+        if not scores:
+            return 0.5
+
+        return float(sum(scores) / len(scores))
+
+    def _calculate_body_size_score(
+        self,
+        keypoints: Dict[str, List[int]],
+        image_size: Tuple[int, int],
+        image_type: str = "full"
+    ) -> float:
+        width, height = image_size
+
+        if width <= 0 or height <= 0:
+            return 0.0
+
+        xs = [p[0] for p in keypoints.values()]
+        ys = [p[1] for p in keypoints.values()]
+
+        if not xs or not ys:
+            return 0.0
+
+        body_w = max(xs) - min(xs)
+        body_h = max(ys) - min(ys)
+
+        h_ratio = body_h / height
+        w_ratio = body_w / width
+
+        if image_type == "full":
+            h_score = min(h_ratio / 0.65, 1.0)
+            w_score = min(w_ratio / 0.25, 1.0)
+        elif image_type == "upper":
+            h_score = min(h_ratio / 0.45, 1.0)
+            w_score = min(w_ratio / 0.30, 1.0)
+        else:
+            h_score = min(h_ratio / 0.45, 1.0)
+            w_score = min(w_ratio / 0.22, 1.0)
+
+        return float(h_score * 0.7 + w_score * 0.3)
+
+    def _calculate_vertical_alignment_score(
+        self,
+        keypoints: Dict[str, List[int]]
+    ) -> float:
+        if not all(p in keypoints for p in [
+            "left_shoulder", "right_shoulder", "left_hip", "right_hip"
+        ]):
+            return 0.7
+
+        shoulder_mid = [
+            (keypoints["left_shoulder"][0] + keypoints["right_shoulder"][0]) / 2,
+            (keypoints["left_shoulder"][1] + keypoints["right_shoulder"][1]) / 2,
+        ]
+
+        hip_mid = [
+            (keypoints["left_hip"][0] + keypoints["right_hip"][0]) / 2,
+            (keypoints["left_hip"][1] + keypoints["right_hip"][1]) / 2,
+        ]
+
+        dx = abs(shoulder_mid[0] - hip_mid[0])
+        dy = max(abs(hip_mid[1] - shoulder_mid[1]), 1)
+
+        tilt_ratio = dx / dy
+
+        return float(max(0.0, 1.0 - tilt_ratio * 2.5))
+
     def draw_pose(self, image: np.ndarray, 
                   detection_result: Dict,
                   draw_landmarks: bool = True,

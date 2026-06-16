@@ -29,6 +29,12 @@ class Config:
     MODEL_PATH: str = os.path.join(MODELS_DIR, 'body_measure.pkl')
     SCALER_PATH: str = os.path.join(MODELS_DIR, 'scaler.pkl')
     
+    MODEL_SHIRT_PATH: str = os.path.join(MODELS_DIR, 'body_measure_shirt.pkl')
+    SCALER_SHIRT_PATH: str = os.path.join(MODELS_DIR, 'scaler_shirt.pkl')
+
+    MODEL_PANTS_PATH: str = os.path.join(MODELS_DIR, 'body_measure_pants.pkl')
+    SCALER_PANTS_PATH: str = os.path.join(MODELS_DIR, 'scaler_pants.pkl')
+    
     # Size chart path
     SIZE_CHART_PATH: str = os.path.join(SIZE_CHART_DIR, 'size_charts.json')
     

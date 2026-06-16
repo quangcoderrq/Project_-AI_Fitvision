@@ -33,13 +33,55 @@ class PredictionLog(Base):
     __tablename__ = "prediction_logs"
 
     id = Column(Integer, primary_key=True, index=True)
+
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+
+    # User input
     height = Column(Float, nullable=False)
     weight = Column(Float, nullable=False)
     gender = Column(String, nullable=False)
     brand = Column(String, nullable=False)
+    region = Column(String, nullable=True)
+    garment_type = Column(String, nullable=True)
+
+    # AI result
     predicted_size = Column(String, nullable=True)
+    shirt_size = Column(String, nullable=True)
+    pants_size = Column(String, nullable=True)
     confidence = Column(Float, nullable=False)
+    pose_quality = Column(Float, nullable=True)
+
+    # Predicted measurements
+    chest = Column(Float, nullable=True)
+    waist = Column(Float, nullable=True)
+    hip = Column(Float, nullable=True)
+    shoulder_width_cm = Column(Float, nullable=True)
+    back_length = Column(Float, nullable=True)
+    inseam = Column(Float, nullable=True)
+    thigh_circumference = Column(Float, nullable=True)
+    neck_circumference = Column(Float, nullable=True)
+    arm_circumference = Column(Float, nullable=True)
+
+    # User actual choice
+    selected_shirt_size = Column(String, nullable=True)
+    selected_pants_size = Column(String, nullable=True)
+
+    # Feedback
+    shirt_feedback = Column(String, nullable=True)
+    pants_feedback = Column(String, nullable=True)
+
+    # fit / tight / loose / wrong
+    overall_feedback = Column(String, nullable=True)
+
+    # specific fit issue
+    issue_area = Column(String, nullable=True)
+    # chest / shoulder / waist / hip / thigh / length / inseam / other
+
+    feedback_note = Column(String, nullable=True)
+
+    returned_or_exchanged = Column(Boolean, default=False)
+
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    feedback_created_at = Column(DateTime(timezone=True), nullable=True)
 
     user = relationship("User", back_populates="prediction_logs")

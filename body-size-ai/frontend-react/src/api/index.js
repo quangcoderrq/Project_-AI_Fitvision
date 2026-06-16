@@ -168,3 +168,30 @@ export const fetchStats = async () => {
         return null;
     }
 };
+export const submitFeedback = async (payload) => {
+    try {
+        const headers = { 'Content-Type': 'application/json' };
+
+        const activeToken = localStorage.getItem('fv_api_token');
+        const jwtToken = localStorage.getItem('fv_jwt_token');
+
+        if (activeToken) {
+            headers['X-API-Token'] = activeToken;
+        } else if (jwtToken) {
+            headers['Authorization'] = `Bearer ${jwtToken}`;
+        } else {
+            headers['X-API-Token'] = 'fv_demo_guest_key';
+        }
+
+        const res = await fetch(`${API_BASE}/api/feedback`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(payload)
+        });
+
+        return await res.json();
+    } catch (error) {
+        console.error('Error submitting feedback:', error);
+        return { success: false, error: error.message };
+    }
+};

@@ -2,7 +2,7 @@
 FastAPI Application
 Main API endpoints for body size prediction.
 """
-
+from datetime import datetime
 import os
 import sys
 import secrets
@@ -40,6 +40,7 @@ from src.api.schemas import (
     AuthResponse,
     UserProfileResponse,
     SubscriptionRequest,
+    FeedbackRequest,
     PredictionLogResponse
 )
 from src.models.predict import BodyPredictor
@@ -180,8 +181,12 @@ async def lifespan(app: FastAPI):
     # Initialize predictor
     if Config.is_model_available():
         predictor = BodyPredictor(
-            model_path=Config.MODEL_PATH,
-            scaler_path=Config.SCALER_PATH
+        model_path=Config.MODEL_PATH,
+        scaler_path=Config.SCALER_PATH,
+        shirt_model_path=Config.MODEL_SHIRT_PATH,
+        shirt_scaler_path=Config.SCALER_SHIRT_PATH,
+        pants_model_path=Config.MODEL_PANTS_PATH,
+        pants_scaler_path=Config.SCALER_PANTS_PATH,
         )
         print("Model loaded successfully!")
     else:
@@ -432,21 +437,46 @@ async def predict_size(
         confidence = min(result['confidence'], size_result['confidence']) if result.get('measurements') else 0.0
         
         # Log prediction to database
+        log_id = None
+        measurements = result.get("measurements") or {}
+
         if pred_size:
             log_entry = PredictionLog(
                 user_id=authorized_user.id,
+
                 height=request.height,
                 weight=request.weight,
                 gender=request.gender,
                 brand=request.brand,
+                region=request.region,
+                garment_type=request.garment_type,
+
                 predicted_size=pred_size,
-                confidence=confidence
+                shirt_size=shirt_size.recommended_size if shirt_size else None,
+                pants_size=pants_size.recommended_size if pants_size else None,
+                confidence=confidence,
+                pose_quality=result.get("pose_quality"),
+
+                chest=measurements.get("chest"),
+                waist=measurements.get("waist"),
+                hip=measurements.get("hip"),
+                shoulder_width_cm=measurements.get("shoulder_width_cm"),
+                back_length=measurements.get("back_length"),
+                inseam=measurements.get("inseam"),
+                thigh_circumference=measurements.get("thigh_circumference"),
+                neck_circumference=measurements.get("neck_circumference"),
+                arm_circumference=measurements.get("arm_circumference"),
             )
+
             db.add(log_entry)
             db.commit()
+            db.refresh(log_entry)
+            log_id = log_entry.id
             
         return PredictionResponse(
             success=True,
+            prediction_log_id=log_id,
+            pose_quality=result.get("pose_quality"),
             require_user_confirmation=result.get('require_user_confirmation', False),
             baggy_clothes_detected=result.get('baggy_clothes_detected', False),
             warning_message=result.get('warning_message'),
@@ -872,8 +902,41 @@ async def get_stats(current_user: User = Depends(get_current_user), db: Session 
             "monthly_usage_percentage": percentage
         }
 
+@app.post("/api/feedback")
+async def submit_feedback(
+    request: FeedbackRequest,
+    db: Session = Depends(get_db),
+    authorized_user: User = Depends(require_authorized_user)
+):
+    log = db.query(PredictionLog).filter(
+        PredictionLog.id == request.prediction_log_id,
+        PredictionLog.user_id == authorized_user.id
+    ).first()
 
+    if not log:
+        raise HTTPException(
+            status_code=404,
+            detail="Prediction log not found"
+        )
 
+    log.selected_shirt_size = request.selected_shirt_size
+    log.selected_pants_size = request.selected_pants_size
+
+    log.shirt_feedback = request.shirt_feedback
+    log.pants_feedback = request.pants_feedback
+
+    log.overall_feedback = request.overall_feedback
+    log.issue_area = request.issue_area
+    log.feedback_note = request.feedback_note
+    log.returned_or_exchanged = request.returned_or_exchanged
+    log.feedback_created_at = datetime.utcnow()
+
+    db.commit()
+
+    return {
+        "success": True,
+        "message": "Feedback saved successfully"
+    }
 # Error handlers
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc):
