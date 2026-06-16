@@ -3,16 +3,16 @@ import { ArrowRight, Bot, Shirt, Layers, ShieldCheck, Zap } from 'lucide-react';
 
 export default function LandingPage({ onNavigate }) {
     return (
-        <div className="fade-in" style={{ paddingBottom: '3rem' }}>
-            {/* Hero Banner */}
-            <section className="hero-section">
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(59, 130, 246, 0.1)', color: 'var(--primary-color)', padding: '0.5rem 1rem', borderRadius: '30px', fontSize: '0.85rem', fontWeight: '600', marginBottom: '1.5rem' }}>
-                    <Bot size={16} /> Công nghệ AI gợi ý size thông minh
+        <div className="landing-page fade-in">
+            <section className="landing-hero">
+                <div className="landing-badge">
+                    <Bot size={16} />
+                    Công nghệ AI gợi ý size thông minh
                 </div>
 
                 <h2 className="hero-title">FitVision AI</h2>
 
-                <h3 style={{ fontSize: '2rem', marginBottom: '1.5rem', fontWeight: '500', lineHeight: '1.3' }}>
+                <h3 className="landing-hero-heading">
                     Giải pháp AI tự động đo cơ thể và gợi ý size quần áo cho cửa hàng online
                 </h3>
 
@@ -22,186 +22,94 @@ export default function LandingPage({ onNavigate }) {
                     và hỗ trợ shop giảm tỷ lệ đổi trả khi bán hàng trực tuyến.
                 </p>
 
-                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                <div className="landing-hero-actions">
                     <button className="btn btn-primary" onClick={() => onNavigate('demo')}>
                         Trải nghiệm demo <ArrowRight size={18} />
                     </button>
+
                     <button className="btn btn-secondary" onClick={() => onNavigate('pricing')}>
                         Xem bảng giá
                     </button>
                 </div>
             </section>
 
-            {/* Stats Metrics */}
-            <section style={{ marginTop: '1rem', marginBottom: '4rem' }}>
+            <section className="landing-section compact">
                 <div className="stats-grid">
-                    <div className="glass-panel stat-card">
-                        <div className="stat-val">+32%</div>
-                        <div className="stat-label">Tăng tỷ lệ chuyển đổi</div>
-                    </div>
-                    <div className="glass-panel stat-card">
-                        <div className="stat-val">-45%</div>
-                        <div className="stat-label">Giảm tỷ lệ đổi trả</div>
-                    </div>
-                    <div className="glass-panel stat-card">
-                        <div className="stat-val">95%</div>
-                        <div className="stat-label">Khách hàng hài lòng với gợi ý size</div>
-                    </div>
+                    <StatCard value="+32%" label="Tăng tỷ lệ chuyển đổi" />
+                    <StatCard value="-45%" label="Giảm tỷ lệ đổi trả" />
+                    <StatCard value="95%" label="Khách hàng hài lòng với gợi ý size" />
                 </div>
             </section>
 
-            {/* Core Features */}
-            <section style={{ marginBottom: '4rem' }}>
-                <h3 style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '2.5rem' }}>
-                    Tính năng nổi bật
-                </h3>
+            <section className="landing-section">
+                <h3 className="landing-section-title">Tính năng nổi bật</h3>
 
                 <div className="grid-3">
-                    <div className="glass-panel flex-col" style={{ padding: '2rem' }}>
-                        <div style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'var(--gradient-1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', marginBottom: '1rem' }}>
-                            <Shirt size={24} />
-                        </div>
-                        <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>
-                            Nhận diện vóc dáng bằng AI
-                        </h4>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5' }}>
-                            Phân tích ảnh toàn thân để nhận diện các điểm quan trọng trên cơ thể,
-                            từ đó ước lượng số đo và đưa ra khuyến nghị size phù hợp.
-                        </p>
-                    </div>
+                    <FeatureCard
+                        icon={<Shirt size={24} />}
+                        gradient="var(--gradient-1)"
+                        title="Nhận diện vóc dáng bằng AI"
+                        text="Phân tích ảnh toàn thân để nhận diện các điểm quan trọng trên cơ thể, từ đó ước lượng số đo và đưa ra khuyến nghị size phù hợp."
+                    />
 
-                    <div className="glass-panel flex-col" style={{ padding: '2rem' }}>
-                        <div style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'var(--gradient-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', marginBottom: '1rem' }}>
-                            <Layers size={24} />
-                        </div>
-                        <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>
-                            Mô phỏng cơ thể 3D
-                        </h4>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5' }}>
-                            Hiển thị mô hình cơ thể trực quan dựa trên số đo ước lượng,
-                            giúp khách hàng dễ hình dung vóc dáng và tự tin hơn khi chọn size.
-                        </p>
-                    </div>
+                    <FeatureCard
+                        icon={<Layers size={24} />}
+                        gradient="var(--gradient-2)"
+                        title="Mô phỏng cơ thể 3D"
+                        text="Hiển thị mô hình cơ thể trực quan dựa trên số đo ước lượng, giúp khách hàng dễ hình dung vóc dáng và tự tin hơn khi chọn size."
+                    />
 
-                    <div className="glass-panel flex-col" style={{ padding: '2rem' }}>
-                        <div style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'var(--gradient-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', marginBottom: '1rem' }}>
-                            <Zap size={24} />
-                        </div>
-                        <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>
-                            Dễ dàng tích hợp vào website
-                        </h4>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5' }}>
-                            Tích hợp FitVision AI vào website bán hàng thông qua Widget hoặc API,
-                            phù hợp với các cửa hàng online và nền tảng thương mại điện tử.
-                        </p>
-                    </div>
+                    <FeatureCard
+                        icon={<Zap size={24} />}
+                        gradient="var(--gradient-gold)"
+                        title="Dễ dàng tích hợp vào website"
+                        text="Tích hợp FitVision AI vào website bán hàng thông qua Widget hoặc API, phù hợp với các cửa hàng online và nền tảng thương mại điện tử."
+                    />
                 </div>
             </section>
 
-            {/* How it works */}
-            <section className="glass-panel" style={{ padding: '3rem 2rem', marginBottom: '4rem' }}>
-                <h3 style={{ textAlign: 'center', fontSize: '1.8rem', marginBottom: '2.5rem' }}>
-                    Quy trình sử dụng đơn giản
-                </h3>
+            <section className="glass-panel landing-section how-it-works">
+                <h3 className="landing-section-title">Quy trình sử dụng đơn giản</h3>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2rem' }}>
-                    <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '2.5rem', color: 'var(--primary-color)', fontWeight: '700', marginBottom: '1rem', fontFamily: 'Outfit' }}>01</div>
-                        <h5 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-                            Tải ảnh toàn thân
-                        </h5>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                            Khách hàng tải lên ảnh đứng thẳng, rõ dáng và đủ ánh sáng.
-                        </p>
-                    </div>
-
-                    <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '2.5rem', color: 'var(--primary-color)', fontWeight: '700', marginBottom: '1rem', fontFamily: 'Outfit' }}>02</div>
-                        <h5 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-                            Nhập thông tin cơ bản
-                        </h5>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                            Người dùng nhập chiều cao, cân nặng, giới tính và thương hiệu cần chọn size.
-                        </p>
-                    </div>
-
-                    <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '2.5rem', color: 'var(--primary-color)', fontWeight: '700', marginBottom: '1rem', fontFamily: 'Outfit' }}>03</div>
-                        <h5 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-                            AI phân tích vóc dáng
-                        </h5>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                            Hệ thống xử lý hình ảnh, ước lượng số đo và đối chiếu với bảng size.
-                        </p>
-                    </div>
-
-                    <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '2.5rem', color: 'var(--primary-color)', fontWeight: '700', marginBottom: '1rem', fontFamily: 'Outfit' }}>04</div>
-                        <h5 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-                            Nhận gợi ý size phù hợp
-                        </h5>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                            Khách hàng nhận kết quả gợi ý size áo, quần hoặc cả bộ chỉ trong vài giây.
-                        </p>
-                    </div>
+                <div className="how-grid">
+                    <StepCard number="01" title="Tải ảnh toàn thân" text="Khách hàng tải lên ảnh đứng thẳng, rõ dáng và đủ ánh sáng." />
+                    <StepCard number="02" title="Nhập thông tin cơ bản" text="Người dùng nhập chiều cao, cân nặng, giới tính và thương hiệu cần chọn size." />
+                    <StepCard number="03" title="AI phân tích vóc dáng" text="Hệ thống xử lý hình ảnh, ước lượng số đo và đối chiếu với bảng size." />
+                    <StepCard number="04" title="Nhận gợi ý size phù hợp" text="Khách hàng nhận kết quả gợi ý size áo, quần hoặc cả bộ chỉ trong vài giây." />
                 </div>
             </section>
 
-            {/* Integration Section */}
-            <section style={{ marginBottom: '4rem' }}>
-                <h3 style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '2.5rem' }}>
-                    Phù hợp cho cửa hàng online
-                </h3>
+            <section className="landing-section">
+                <h3 className="landing-section-title">Phù hợp cho cửa hàng online</h3>
 
                 <div className="grid-3">
-                    <div className="glass-panel flex-col" style={{ padding: '2rem' }}>
-                        <div style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'var(--gradient-1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', marginBottom: '1rem' }}>
-                            <ShieldCheck size={24} />
-                        </div>
-                        <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>
-                            Giảm sai size khi mua hàng
-                        </h4>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5' }}>
-                            Hỗ trợ khách hàng chọn size chính xác hơn, hạn chế tình trạng mua nhầm size
-                            và giảm chi phí đổi trả cho shop.
-                        </p>
-                    </div>
+                    <FeatureCard
+                        icon={<ShieldCheck size={24} />}
+                        gradient="var(--gradient-1)"
+                        title="Giảm sai size khi mua hàng"
+                        text="Hỗ trợ khách hàng chọn size chính xác hơn, hạn chế tình trạng mua nhầm size và giảm chi phí đổi trả cho shop."
+                    />
 
-                    <div className="glass-panel flex-col" style={{ padding: '2rem' }}>
-                        <div style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'var(--gradient-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', marginBottom: '1rem' }}>
-                            <Bot size={24} />
-                        </div>
-                        <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>
-                            Tư vấn size tự động
-                        </h4>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5' }}>
-                            Thay vì tư vấn thủ công, shop có thể để FitVision AI hỗ trợ khách hàng
-                            chọn size ngay trên website.
-                        </p>
-                    </div>
+                    <FeatureCard
+                        icon={<Bot size={24} />}
+                        gradient="var(--gradient-2)"
+                        title="Tư vấn size tự động"
+                        text="Thay vì tư vấn thủ công, shop có thể để FitVision AI hỗ trợ khách hàng chọn size ngay trên website."
+                    />
 
-                    <div className="glass-panel flex-col" style={{ padding: '2rem' }}>
-                        <div style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'var(--gradient-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', marginBottom: '1rem' }}>
-                            <Zap size={24} />
-                        </div>
-                        <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>
-                            Tích hợp qua mã API
-                        </h4>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5' }}>
-                            Doanh nghiệp có thể sử dụng mã API để kết nối FitVision AI với hệ thống
-                            bán hàng, trang sản phẩm hoặc công cụ quản lý riêng.
-                        </p>
-                    </div>
+                    <FeatureCard
+                        icon={<Zap size={24} />}
+                        gradient="var(--gradient-gold)"
+                        title="Tích hợp qua mã API"
+                        text="Doanh nghiệp có thể sử dụng mã API để kết nối FitVision AI với hệ thống bán hàng, trang sản phẩm hoặc công cụ quản lý riêng."
+                    />
                 </div>
             </section>
 
-            {/* Bottom Call-to-action */}
-            <section style={{ textAlign: 'center', padding: '2rem 0' }}>
-                <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>
-                    Sẵn sàng nâng cấp trải nghiệm chọn size?
-                </h3>
+            <section className="landing-cta">
+                <h3>Sẵn sàng nâng cấp trải nghiệm chọn size?</h3>
 
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
+                <p>
                     Dùng thử FitVision AI ngay hôm nay để giúp khách hàng chọn đúng size nhanh hơn,
                     tự tin hơn và mua hàng dễ dàng hơn.
                 </p>
@@ -210,65 +118,80 @@ export default function LandingPage({ onNavigate }) {
                     Trải nghiệm demo ngay
                 </button>
             </section>
-            {/* Footer */}
-<footer className="glass-panel" style={{ padding: '2.5rem 2rem', marginTop: '4rem' }}>
-    <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: '2rem',
-        marginBottom: '2rem'
-    }}>
-        <div>
-            <h3 style={{ color: 'var(--primary-color)', fontSize: '1.5rem', marginBottom: '0.75rem' }}>
-                FitVision AI
-            </h3>
-            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                Giải pháp AI hỗ trợ đo cơ thể và gợi ý size quần áo cho cửa hàng online.
-            </p>
-        </div>
 
-        <div>
-            <h4 style={{ marginBottom: '0.75rem' }}>Sản phẩm</h4>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Gợi ý size bằng AI</p>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Mô phỏng cơ thể 3D</p>
-            <p style={{ color: 'var(--text-secondary)' }}>API tích hợp website</p>
-        </div>
+            <footer className="glass-panel landing-footer">
+                <div className="landing-footer-grid">
+                    <div>
+                        <h3 className="footer-brand">FitVision AI</h3>
+                        <p>
+                            Giải pháp AI hỗ trợ đo cơ thể và gợi ý size quần áo cho cửa hàng online.
+                        </p>
+                    </div>
 
-        <div>
-            <h4 style={{ marginBottom: '0.75rem' }}>Dành cho shop</h4>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Giảm đổi trả</p>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Tăng trải nghiệm mua hàng</p>
-            <p style={{ color: 'var(--text-secondary)' }}>Tư vấn size tự động</p>
-        </div>
+                    <FooterColumn
+                        title="Sản phẩm"
+                        items={['Gợi ý size bằng AI', 'Mô phỏng cơ thể 3D', 'API tích hợp website']}
+                    />
 
-        <div>
-            <h4 style={{ marginBottom: '0.75rem' }}>Liên hệ</h4>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
-                Email: support@fitvision.ai
-            </p>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
-                Website: fitvision.ai
-            </p>
-            <p style={{ color: 'var(--text-secondary)' }}>
-                Việt Nam
-            </p>
-        </div>
-    </div>
+                    <FooterColumn
+                        title="Dành cho shop"
+                        items={['Giảm đổi trả', 'Tăng trải nghiệm mua hàng', 'Tư vấn size tự động']}
+                    />
 
-    <div style={{
-        borderTop: '1px solid rgba(255,255,255,0.1)',
-        paddingTop: '1.25rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        gap: '1rem',
-        flexWrap: 'wrap',
-        color: 'var(--text-secondary)',
-        fontSize: '0.9rem'
-    }}>
-        <span>© 2025 FitVision AI. All rights reserved.</span>
-        <span>AI Size Recommendation Platform</span>
-    </div>
-</footer>
+                    <FooterColumn
+                        title="Liên hệ"
+                        items={['Email: support@fitvision.ai', 'Website: fitvision.ai', 'Việt Nam']}
+                    />
+                </div>
+
+                <div className="landing-footer-bottom">
+                    <span>© 2025 FitVision AI. All rights reserved.</span>
+                    <span>AI Size Recommendation Platform</span>
+                </div>
+            </footer>
+        </div>
+    );
+}
+
+function StatCard({ value, label }) {
+    return (
+        <div className="glass-panel stat-card">
+            <div className="stat-val">{value}</div>
+            <div className="stat-label">{label}</div>
+        </div>
+    );
+}
+
+function FeatureCard({ icon, gradient, title, text }) {
+    return (
+        <div className="glass-panel feature-card">
+            <div className="feature-icon" style={{ background: gradient }}>
+                {icon}
+            </div>
+
+            <h4>{title}</h4>
+            <p>{text}</p>
+        </div>
+    );
+}
+
+function StepCard({ number, title, text }) {
+    return (
+        <div className="step-card">
+            <div className="step-number">{number}</div>
+            <h5>{title}</h5>
+            <p>{text}</p>
+        </div>
+    );
+}
+
+function FooterColumn({ title, items }) {
+    return (
+        <div>
+            <h4>{title}</h4>
+            {items.map((item) => (
+                <p key={item}>{item}</p>
+            ))}
         </div>
     );
 }

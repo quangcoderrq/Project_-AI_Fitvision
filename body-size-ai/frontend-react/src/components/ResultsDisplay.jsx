@@ -115,7 +115,7 @@ export default function ResultsDisplay({ result, garmentType, onView3D }) {
 
     return (
         <div className="fade-in">
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+            <div className="result-cards">
                 {showShirt && renderSizeCard('Size Áo', result.shirt_size, result.predicted_size, '👕')}
                 {showPants && renderSizeCard('Size Quần', result.pants_size, result.predicted_size, '👖')}
             </div>

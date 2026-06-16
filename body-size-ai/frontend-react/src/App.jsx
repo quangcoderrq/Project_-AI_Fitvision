@@ -390,10 +390,8 @@ export default function App() {
 
             {/* Navigation Bar */}
             <nav className="navbar">
-                <div 
-                    style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}
-                    onClick={() => setActiveTab('home')}
-                >
+                  <div className="nav-brand" onClick={() => setActiveTab('home')}>
+
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', borderRadius: '8px', background: 'var(--gradient-1)', color: 'white' }}>
                         <Sparkles size={18} fill="white" />
                     </div>
@@ -409,13 +407,13 @@ export default function App() {
                     <button className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}>Developer Dashboard</button>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div className="nav-actions">
                     <button className="theme-toggle" onClick={toggleTheme}>
                         {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                     </button>
                     
                     {isLoggedIn ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div className="nav-user-actions">
                             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                                 <User size={16} /> {userFullName || userEmail.split('@')[0]}
                             </div>
@@ -424,7 +422,7 @@ export default function App() {
                             </button>
                         </div>
                     ) : (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div className="nav-user-actions">
                             <button className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }} onClick={() => goToAuth('register')}>
                                 Đăng ký
                             </button>

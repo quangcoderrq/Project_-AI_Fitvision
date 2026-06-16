@@ -59,13 +59,14 @@ export default function ImageUploader({ image, setImage }) {
                     transition: 'all 0.3s ease'
                 }}
             >
-                <input 
-                    type="file" 
-                    hidden 
-                    accept="image/*" 
-                    ref={fileInputRef} 
+                    <input
+                    type="file"
+                    hidden
+                    accept="image/*"
+                    capture="environment"
+                    ref={fileInputRef}
                     onChange={handleFileChange}
-                />
+                    />
                 
                 {image ? (
                     <>

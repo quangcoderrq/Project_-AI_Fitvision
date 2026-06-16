@@ -140,7 +140,7 @@ function ProductPage() {
     const [platformTab, setPlatformTab] = useState('html');
 
     return (
-        <div className="fade-in" style={{ paddingBottom: '3rem' }}>
+        <div className="developer-dashboard fade-in">
             
             {/* Page Header */}
             <div style={{ marginBottom: '2rem' }}>
@@ -219,7 +219,7 @@ function ProductPage() {
             </div>
 
             {/* Dashboard Tabs */}
-            <div style={{ display: 'flex', borderBottom: '1px solid var(--glass-border)', marginBottom: '1.5rem' }}>
+            <div className="dashboard-tabs">
                 <button 
                     className={`nav-item ${activeSubTab === 'integration' ? 'active' : ''}`}
                     onClick={() => setActiveSubTab('integration')}
