@@ -356,12 +356,12 @@ async def predict_size(
         is_valid, errors, warnings = image_validator.validate_array(image)
         if not is_valid:
             return PredictionResponse(
-                success=False,
-                error=f"Invalid image: {', '.join(errors)}",
-                confidence=0.0
-            )
-        
-        # Preprocess image
+        success=False,
+        error=f"Invalid image: {', '.join(errors)}",
+        confidence=0.0
+    )
+
+        image = image_validator.resize_if_needed(image)
         processed_image = image_preprocessor.preprocess(image)
         
         # Predict body measurements
@@ -550,6 +550,9 @@ async def predict_size_upload(
                 confidence=0.0
             )
         
+        # Resize small images before preprocessing
+        image_array = image_validator.resize_if_needed(image_array)
+
         # Preprocess
         processed = image_preprocessor.preprocess(image_array)
         
