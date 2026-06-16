@@ -1,0 +1,28 @@
+[33mcommit 11ed71dd6083aa2d42e02906743eb2900595f737[m
+Author: quangcoderrq <nhanthiengg123@gmail.com>
+Date:   Tue Jun 16 17:30:43 2026 +0700
+
+    fix chat feedback and Migrate SQLite to PostgreSQL
+
+ body-size-ai/backend/fitvision.db                  | Bin [31m36864[m -> [32m36864[m bytes
+ body-size-ai/backend/models/body_measure.pkl       | Bin [31m25494899[m -> [32m243040611[m bytes
+ body-size-ai/backend/models/body_measure_pants.pkl | Bin [31m0[m -> [32m108575280[m bytes
+ body-size-ai/backend/models/body_measure_shirt.pkl | Bin [31m0[m -> [32m162450878[m bytes
+ body-size-ai/backend/models/metrics_full.json      |  93 [32m++++[m
+ body-size-ai/backend/models/metrics_pants.json     |  83 [32m++++[m
+ body-size-ai/backend/models/metrics_shirt.json     |  87 [32m++++[m
+ body-size-ai/backend/models/scaler.pkl             | Bin [31m929[m -> [32m777[m bytes
+ body-size-ai/backend/models/scaler_pants.pkl       | Bin [31m0[m -> [32m777[m bytes
+ body-size-ai/backend/models/scaler_shirt.pkl       | Bin [31m0[m -> [32m777[m bytes
+ body-size-ai/backend/src/api/app.py                |  71 [32m++[m[31m-[m
+ body-size-ai/backend/src/api/schemas.py            | 262 [32m++++[m[31m------[m
+ body-size-ai/backend/src/database.py               |  12 [32m+[m[31m-[m
+ body-size-ai/backend/src/models/db_models.py       |  44 [32m+[m[31m-[m
+ body-size-ai/backend/src/models/predict.py         | 489 [32m++++++++++[m[31m---------[m
+ body-size-ai/backend/src/models/regressors.py      | 304 [32m++++++[m[31m------[m
+ body-size-ai/backend/src/models/train.py           | 535 [32m+++++++++++++++[m[31m------[m
+ body-size-ai/backend/src/pose/pose_detector.py     | 159 [32m++++++[m
+ body-size-ai/backend/src/utils/config.py           |   6 [32m+[m
+ body-size-ai/frontend-react/src/api/index.js       |  27 [32m++[m
+ .../src/components/ResultsDisplay.jsx              | 277 [32m++++++++++[m[31m-[m
+ 21 files changed, 1733 insertions(+), 716 deletions(-)
