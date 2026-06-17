@@ -17,6 +17,54 @@ OUTPUT_PATH = os.path.join(
 )
 
 
+FIELDNAMES = [
+    "id",
+
+    "height",
+    "weight",
+    "gender",
+    "brand",
+    "region",
+    "garment_type",
+
+    "predicted_size",
+    "predicted_shirt_size",
+    "predicted_pants_size",
+
+    "actual_shirt_size",
+    "actual_pants_size",
+
+    "overall_feedback",
+    "shirt_feedback",
+    "pants_feedback",
+    "issue_area",
+    "feedback_note",
+    "returned_or_exchanged",
+
+    "feedback_score",
+    "is_training_sample",
+
+    "confidence",
+    "pose_quality",
+
+    "model_version",
+    "prediction_source",
+
+    "chest",
+    "waist",
+    "hip",
+    "shoulder_width_cm",
+    "back_length",
+    "inseam",
+    "thigh_circumference",
+    "neck_circumference",
+    "arm_circumference",
+
+    "created_at",
+    "feedback_created_at",
+]
+
+
 def export_feedback_dataset():
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
 
@@ -24,7 +72,7 @@ def export_feedback_dataset():
 
     try:
         logs = db.query(PredictionLog).filter(
-            PredictionLog.overall_feedback.isnot(None)
+            PredictionLog.is_training_sample == True
         ).all()
 
         rows = []
@@ -54,10 +102,17 @@ def export_feedback_dataset():
                 "shirt_feedback": log.shirt_feedback,
                 "pants_feedback": log.pants_feedback,
                 "issue_area": log.issue_area,
+                "feedback_note": log.feedback_note,
                 "returned_or_exchanged": log.returned_or_exchanged,
+
+                "feedback_score": log.feedback_score,
+                "is_training_sample": log.is_training_sample,
 
                 "confidence": log.confidence,
                 "pose_quality": log.pose_quality,
+
+                "model_version": log.model_version,
+                "prediction_source": log.prediction_source,
 
                 "chest": log.chest,
                 "waist": log.waist,
@@ -73,45 +128,12 @@ def export_feedback_dataset():
                 "feedback_created_at": log.feedback_created_at,
             })
 
-        fieldnames = list(rows[0].keys()) if rows else [
-            "id",
-            "height",
-            "weight",
-            "gender",
-            "brand",
-            "region",
-            "garment_type",
-            "predicted_size",
-            "predicted_shirt_size",
-            "predicted_pants_size",
-            "actual_shirt_size",
-            "actual_pants_size",
-            "overall_feedback",
-            "shirt_feedback",
-            "pants_feedback",
-            "issue_area",
-            "returned_or_exchanged",
-            "confidence",
-            "pose_quality",
-            "chest",
-            "waist",
-            "hip",
-            "shoulder_width_cm",
-            "back_length",
-            "inseam",
-            "thigh_circumference",
-            "neck_circumference",
-            "arm_circumference",
-            "created_at",
-            "feedback_created_at",
-        ]
-
         with open(OUTPUT_PATH, "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
             writer.writeheader()
             writer.writerows(rows)
 
-        print(f"Exported {len(rows)} feedback rows")
+        print(f"Exported {len(rows)} feedback training rows")
         print(f"Saved to: {OUTPUT_PATH}")
 
     finally:

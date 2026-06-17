@@ -84,4 +84,12 @@ class PredictionLog(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     feedback_created_at = Column(DateTime(timezone=True), nullable=True)
 
+    # Learning / retraining metadata
+    model_version = Column(String, nullable=True)
+    prediction_source = Column(String, nullable=True)
+
+    feedback_score = Column(Integer, nullable=True)
+    would_use_again = Column(Boolean, nullable=True)
+    is_training_sample = Column(Boolean, default=False)
+
     user = relationship("User", back_populates="prediction_logs")

@@ -3,11 +3,13 @@ FastAPI Application
 Main API endpoints for body size prediction.
 """
 from datetime import datetime
+
 import os
 import sys
 import secrets
 from typing import List, Optional
 from contextlib import asynccontextmanager
+
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Depends, Header, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -456,6 +458,10 @@ async def predict_size(
                 pants_size=pants_size.recommended_size if pants_size else None,
                 confidence=confidence,
                 pose_quality=result.get("pose_quality"),
+                
+                model_version="v1.0",
+                prediction_source="production",
+                is_training_sample=False,
 
                 chest=measurements.get("chest"),
                 waist=measurements.get("waist"),
@@ -934,6 +940,16 @@ async def submit_feedback(
     log.returned_or_exchanged = request.returned_or_exchanged
     log.feedback_created_at = datetime.utcnow()
 
+    score_map = {
+    "fit": 5,
+    "loose": 3,
+    "tight": 3,
+    "wrong": 1,
+}
+
+    log.feedback_score = score_map.get(request.overall_feedback, 0)
+    log.is_training_sample = request.overall_feedback in ["fit", "tight", "loose", "wrong"]
+    
     db.commit()
 
     return {

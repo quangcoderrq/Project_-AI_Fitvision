@@ -52,6 +52,12 @@ def migrate_db():
             "pants_size": "VARCHAR",
             "pose_quality": "FLOAT",
 
+            "model_version": "VARCHAR",
+            "prediction_source": "VARCHAR",
+            "feedback_score": "INTEGER",
+            "would_use_again": "BOOLEAN",
+            "is_training_sample": "BOOLEAN",
+
             "chest": "FLOAT",
             "waist": "FLOAT",
             "hip": "FLOAT",
